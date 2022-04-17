@@ -2,6 +2,8 @@
   <div class="home">
     <h1>Composition API Method</h1>
     <h2>Available todo is {{ todoCount }}</h2>
+    <h4>Completed todo is {{completeCount}}</h4>
+    <h4>Uncompleted todo is {{uncompleteCount}}</h4>
     <input
       type="text"
       placeholder="Add todo"
@@ -10,9 +12,9 @@
     />
     <ul>
       <li v-for="(todo, index) in todos" :key="todo.id">
-        <span>{{ todo.todoName }}</span>
+     <span :class="todo.complete ? 'check' : 'uncheck' " >{{ todo.todoName }}</span>
         <button @click="deleteTodo(index)">X</button>
-        <button @click="check(index)">✅</button>
+        <button @click="check(todo)">✅</button>
       </li>
     </ul>
   </div>
@@ -25,18 +27,21 @@ import { computed, watch } from '@vue/runtime-core';
 export default {
   setup() {
     const todos = ref([
-      {
-        id: 1,
-        todoName: "One",
-      },
-      {
-        id: 2,
-        todoName: "Two",
-      },
-      {
-        id: 3,
-        todoName: "Three",
-      },
+       {
+          id: 1,
+          todoName: "One",
+          complete: true
+        },
+        {
+          id: 2,
+          todoName: "Two",
+          complete: false
+        },
+        {
+          id: 3,
+          todoName: "Three",
+          complete: false
+        },
     ]);
     const addedTodo = ref("");
     
@@ -46,6 +51,7 @@ export default {
       let newTodo = {
         id: Date.now(),
         todoName: addedTodo.value,
+        complete: false
       };
     
       todos.value.push(newTodo)
@@ -61,6 +67,24 @@ export default {
       return todos.value.length
     })
 
+    const completeCount = computed(() =>{
+      let completedTodo = todos.value.filter(todo => {
+        return todo.complete === true
+      })
+      return completedTodo.length
+    })
+
+    const uncompleteCount = computed(() =>{
+       let uncompletedTodo = todos.value.filter(todo => {
+        return todo.complete === false
+      })
+      return uncompletedTodo.length
+    })
+
+    const check = (todo) => {
+      todo.complete = !todo.complete
+    } 
+
 
     watch(addedTodo, (newValue) => {
       console.log("newValue: ", newValue)
@@ -70,7 +94,7 @@ export default {
       }
     })
 
-    return { todos, addedTodo, addNewTodo, deleteTodo, todoCount };
+    return { todos, addedTodo, addNewTodo, deleteTodo, todoCount, check,  completeCount, uncompleteCount};
   },
 };
 </script>

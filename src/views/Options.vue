@@ -2,6 +2,8 @@
   <div class="home">
     <h1>Options API Method</h1>
     <h2>Available todo is {{ todoCount }}</h2>
+    <h4>Completed todo is {{completeCount}}</h4>
+    <h4>Uncompleted todo is {{uncompleteCount}}</h4>
     <input
       type="text"
       placeholder="Add todo"
@@ -19,6 +21,7 @@
 </template>
 
 <script>
+import { toRef } from '@vue/reactivity';
 // @ is an alias to /src
 export default {
   data() {
@@ -28,7 +31,7 @@ export default {
         {
           id: 1,
           todoName: "One",
-          complete: false
+          complete: true
         },
         {
           id: 2,
@@ -50,6 +53,18 @@ export default {
     todoCount() {
       return this.todos.length;
     },
+    completeCount(){
+      let completedTodo = this.todos.filter(todo => {
+        return todo.complete === true
+      })
+      return completedTodo.length
+    },
+    uncompleteCount(){
+      let uncompletedTodo = this.todos.filter(todo => {
+        return todo.complete === false
+      })
+      return uncompletedTodo.length
+    }
   },
   watch:{
     addedTodo(newValue){  
@@ -101,6 +116,7 @@ li span {
 
 .check{
   text-decoration: line-through;
+  opacity: .5;
 }
 
 .uncheck{
