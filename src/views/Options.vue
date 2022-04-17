@@ -10,9 +10,9 @@
     />
     <ul>
       <li v-for="(todo, index) in todos" :key="todo.id">
-        <span>{{ todo.todoName }}</span>
+        <span :class="todo.complete ? 'check' : 'uncheck' " >{{ todo.todoName }}</span>
         <button @click="deleteTodo(index)"  >X</button>
-        <!-- <button @click="check(index)">✅</button> -->
+        <button @click="check(todo)">✅</button>
       </li>
     </ul>
   </div>
@@ -28,17 +28,20 @@ export default {
         {
           id: 1,
           todoName: "One",
+          complete: false
         },
         {
           id: 2,
           todoName: "Two",
+          complete: false
         },
         {
           id: 3,
           todoName: "Three",
+          complete: false
         },
       ],
-      isCompleted: false,
+      isCompleted: true,
       activeId: 0,
       bannedWords: ["fuck", "bitch", "nigga", "bitcoin"]
     };
@@ -63,6 +66,7 @@ export default {
       let newTodo = {
         id: Date.now(),
         todoName: this.addedTodo,
+        complete: false 
       };
       this.todos.push(newTodo);
       this.addedTodo = "";
@@ -70,9 +74,8 @@ export default {
     deleteTodo(index) {
       this.todos.splice(index, 1);
     },
-    check(index){
-      // this.isCompleted = !this.isCompleted
-    
+    check(todo){
+      todo.complete = !todo.complete
     }
   },
 };
@@ -98,5 +101,9 @@ li span {
 
 .check{
   text-decoration: line-through;
+}
+
+.uncheck{
+  text-decoration: none;
 }
 </style>

@@ -12,7 +12,7 @@
       <li v-for="(todo, index) in todos" :key="todo.id">
         <span>{{ todo.todoName }}</span>
         <button @click="deleteTodo(index)">X</button>
-        <!-- <button @click="check(index)">✅</button> -->
+        <button @click="check(index)">✅</button>
       </li>
     </ul>
   </div>
